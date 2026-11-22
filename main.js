@@ -4,7 +4,7 @@ let mainWin = null;
 function createWindow() {
   const win = new BrowserWindow({
     width: 1366, height: 820, backgroundColor: '#ffffff', title: 'Hollywood POS',
-    webPreferences: { contextIsolation: true, nodeIntegration: false, preload: path.join(__dirname, 'preload.js') }
+    webPreferences: { contextIsolation: true, nodeIntegration: false, autoplayPolicy: 'no-user-gesture-required', preload: path.join(__dirname, 'preload.js') }
   });
   Menu.setApplicationMenu(null);
   win.loadFile(path.join(__dirname, 'app', 'index.html'));
