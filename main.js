@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
+let mainWin = null;
 function createWindow() {
   const win = new BrowserWindow({
     width: 1366, height: 820, backgroundColor: '#ffffff', title: 'Hollywood POS',
@@ -7,6 +8,8 @@ function createWindow() {
   });
   Menu.setApplicationMenu(null);
   win.loadFile(path.join(__dirname, 'app', 'index.html'));
+  mainWin = win;
+  win.on('closed', () => { mainWin = null; });
 }
 // Silent customer-bill printing to the Windows default printer (80mm thermal roll)
 ipcMain.handle('print-html', (ev, html) => new Promise((resolve) => {
@@ -23,6 +26,13 @@ ipcMain.handle('print-html', (ev, html) => new Promise((resolve) => {
 }));
 const lock = app.requestSingleInstanceLock();
 if (!lock) { app.quit(); } else {
+  // Opening the app again (double click, shortcut) brings the running window to the front instead of starting a second copy
+  app.on('second-instance', () => {
+    if (!mainWin) { createWindow(); return; }
+    if (mainWin.isMinimized()) mainWin.restore();
+    mainWin.show();
+    mainWin.setAlwaysOnTop(true); mainWin.focus(); mainWin.setAlwaysOnTop(false);
+  });
   app.whenReady().then(createWindow);
   app.on('window-all-closed', () => app.quit());
 }
