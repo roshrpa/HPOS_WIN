@@ -13,9 +13,23 @@
   "build": {
     "appId": "ae.hollywood.pos",
     "productName": "Hollywood POS",
-    "files": ["main.js", "preload.js", "app/**/*"],
-    "win": { "target": "nsis" },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true }
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
   },
-  "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.0.0" }
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
 }
