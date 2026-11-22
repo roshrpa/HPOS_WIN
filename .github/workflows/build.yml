@@ -4,6 +4,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -15,3 +17,11 @@ jobs:
         with:
           name: Hollywood-POS-Windows
           path: dist/*.exe
+      - name: Publish installer as a release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp dist/*.exe Hollywood-POS-Setup.exe
+          gh release delete win-latest --yes --cleanup-tag || true
+          gh release create win-latest Hollywood-POS-Setup.exe --title "Hollywood POS for Windows (latest)" --notes "Download and run Hollywood-POS-Setup.exe. It installs over the old version."
